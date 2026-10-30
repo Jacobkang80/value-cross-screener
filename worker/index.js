@@ -95,13 +95,11 @@ function createHandler(page,fetcher=fetch){
  const url=new URL(request.url);
  if(url.pathname==='/api/screen'){
  const metric=url.searchParams.get('metric')??'pbr';if(!['pbr','per','roe'].includes(metric))return Response.json({error:'지원하지 않는 정렬'},{status:400});
- const cacheKey=new Request(`${url.origin}/api/screen?metric=${metric}`),edge=globalThis.caches?.default;
- const hit=edge?await edge.match(cacheKey):null;if(hit)return hit;
+ // Sites Workers may prohibit the platform cache; collection must not depend on it.
  const old=memory.get(metric);if(old&&Date.now()-old.time<600000)return Response.json(old.value,{headers:{'Cache-Control':'private, no-store'}});
  try{if(!active.has(metric))active.set(metric,collect(metric).finally(()=>active.delete(metric)));const result=await active.get(metric),complete=result.status==='complete'&&result.vix.status==='ok';
  if(complete)memory.set(metric,{time:Date.now(),value:result});
- const response=Response.json(result,{headers:{'Cache-Control':complete?'max-age=0, s-maxage=600':'no-store'}});
- if(complete&&edge&&ctx?.waitUntil)ctx.waitUntil(edge.put(cacheKey,response.clone()));return response;
+ return Response.json(result,{headers:{'Cache-Control':'private, no-store'}});
  }catch(e){return Response.json({error:e.message,collectedAt:new Date().toISOString()},{status:502,headers:{'Cache-Control':'no-store'}});}
  }
  if(url.pathname==='/health')return Response.json({ok:true,version:3});
