@@ -15,3 +15,13 @@ test('partial failures remain visible; never substitute lower ranked symbols',as
 test('intraday and weekend completed date selection',()=>{const rows=[{localTradedAt:'2026-10-30'},{localTradedAt:asOf}];assert.equal(completedDate(rows,new Date('2026-10-30T02:00:00Z')),asOf);assert.equal(completedDate(rows,new Date('2026-10-30T07:30:00Z')),'2026-10-30');assert.equal(completedDate(rows,new Date('2026-11-01T02:00:00Z')),'2026-10-30');});
 test('deduplicate bars, reject short/stale data, tolerate CSV CRLF',()=>{assert.equal(parseBars(bars+bars,asOf).length,100);assert.throws(()=>parseBars(bars,'2026-10-30'),/최신/);assert.throws(()=>parseBars('',asOf),/부족/);assert.equal(parseVix('DATE,OPEN,HIGH,LOW,CLOSE\r\n10/28/2026,1,2,3,16.91\r\n',now()).value,16.91);});
 test('API rejects arbitrary metric without calling upstream',async()=>{const {f,calls}=mock(),h=createHandler('<html lang="ko">test</html>',f),bad=await h(new Request('https://test/api/screen?metric=x'));assert.equal(bad.status,400);assert.equal(calls.length,0);assert.match(await (await h(new Request('https://test/'))).text(),/<html/);});
+test('restricted cache environments still return market data and reuse memory cache',async()=>{
+ const original=Object.getOwnPropertyDescriptor(globalThis,'caches');
+ Object.defineProperty(globalThis,'caches',{configurable:true,get(){throw Error('This Worker is not permitted to access the default cache.');}});
+ try{
+  const {f,calls}=mock(),h=createHandler('<html></html>',f);
+  const response=await h(new Request('https://test/api/screen?metric=pbr'));
+  assert.equal(response.status,200);const data=await response.json();assert.equal(data.stocks.length,20);assert.equal(data.vix.value,16.91);
+  const requests=calls.length;assert.equal((await h(new Request('https://test/api/screen?metric=pbr'))).status,200);assert.equal(calls.length,requests);
+ }finally{if(original)Object.defineProperty(globalThis,'caches',original);else delete globalThis.caches;}
+});
