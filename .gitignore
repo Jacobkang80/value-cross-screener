@@ -1,0 +1,12 @@
+.cache/
+__pycache__/
+node_modules/
+artifacts/
+dist/
+
+# Local connection and deployment settings
+connections.json
+.openai/hosting.json
+.env
+.env.*
+!.env.example

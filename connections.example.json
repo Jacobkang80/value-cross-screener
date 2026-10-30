@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 3,
+  "sheet": {
+    "id": null,
+    "url": null,
+    "liveAutoSave": false
+  },
+  "github": {
+    "repository": "Jacobkang80/value-cross-screener",
+    "status": "archived"
+  },
+  "collector": {
+    "status": "live_on_open",
+    "dailyBarsPerMarket": 10,
+    "cacheMinutes": 10
+  }
+}

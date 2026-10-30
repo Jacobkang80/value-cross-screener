@@ -1,0 +1,14 @@
+{
+  "name": "seokwoo-value-cross",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "validate": "node scripts/validate-artifact.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "dev": "node --use-env-proxy scripts/dev.mjs"
+  },
+  "engines": {
+    "node": ">=24.22.0"
+  }
+}
