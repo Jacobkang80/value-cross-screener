@@ -23,12 +23,13 @@ footer{display:flex;align-items:flex-start;justify-content:space-between;gap:16p
 <header><div class="brand"><div class="mark" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 17V12M10 17V8M16 17V4M4 21H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><h1>종목 스크리너</h1><div class="sub">KOSPI · KOSDAQ</div></div></div><button class="refresh" id="refresh"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 6A5.3 5.3 0 1 0 13 10M13 2V6H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>갱신 확인</button></header>
 <div id="bench" class="bench" aria-label="시장 지표"></div>
 <div class="reference"><strong>S&amp;P 500 참고 멀티플 161.14</strong> = 후행 PER 26.33 × PBR 6.12 · 2026.10.29 미국 종가 기준 · <a href="https://www.multpl.com/s-p-500-pe-ratio" target="_blank" rel="noopener noreferrer">PER</a> / <a href="https://www.multpl.com/s-p-500-price-to-book" target="_blank" rel="noopener noreferrer">PBR</a> · Multpl 추정값</div>
-<div class="screen-rules"><b>시총 ≥ 1조원</b><span>기본 순위: PER &gt; 0 · PBR &gt; 0</span><span>기본 정렬: 고ROE TOP 5</span></div><div class="toolbar"><div class="tabs" role="group" aria-label="종목 정렬"><button data-metric="pbr" aria-pressed="false">저PBR</button><button data-metric="per" aria-pressed="false">저PER</button><button data-metric="roe" aria-pressed="true">고ROE</button></div><span class="note">시장별 상위 5개</span><div id="status" class="status loading" role="status" aria-live="polite"><i class="dot"></i><span id="status-text">수집 중</span></div></div>
-<div id="results" class="markets"></div>
-<div class="summary"><span class="summary-label">요약</span><div id="summary" class="summary-text">선택한 지표의 상위 종목을 수집합니다.</div></div>
-<section class="turn-section"><div class="section-title"><h2>흑자전환</h2><span id="turn-status">분기 실적 확인 대기</span></div><p id="turn-note" class="turn-note">시총 1조원 이상 · PBR 양수 · 최근 분기 흑자 / 전년 동기 적자 · 추정치 제외</p><div id="turn-results" class="markets"></div><div id="turn-errors" class="turn-errors"></div></section><footer><details><summary>수집·계산 기준</summary><p>시가총액 1조원 이상인 거래 가능 보통주를 먼저 선별합니다. 기본 순위는 PER·PBR 모두 양수인 기업에서 시장별 상위 5개를 표시하며 기본 정렬은 ROE 내림차순입니다. 고ROE 순위는 ROE 역시 양수인 기업을 대상으로 합니다. 동률이면 시총 내림차순, 종목코드 순입니다.</p><p>흑자전환은 동일한 네이버 분기 영업이익 시계열에서 최근 실적이 양수, 전년 동기가 음수인 경우입니다. PER 음수·미제공은 허용하지만 PBR 양수와 시총 1조원 조건은 유지합니다. 직전 분기까지 세 값이 모두 확인돼야 판정합니다. 추정치 표시는 제외하며 회사별로 최근 실적분기가 다를 수 있습니다. 연결·별도 및 ROE 결산기간은 공급자 기준입니다. 자료 부족·조회 실패는 해당 없음과 구분합니다.</p><p>시장 PER·PBR은 전체 보통주 양수 지표별 Σ시총 ÷ Σ(시총/지표)로 계산한 참고값이며 선별된 기업만의 평균이나 KRX 공식 지수값이 아닙니다. S&amp;P 500 참고 멀티플은 Multpl의 2026.10.29 미국 종가 추정값인 후행 PER 26.33 × PBR 6.12 = 161.14입니다. 후행 PER은 최근 12개월 보고이익 기준이며, PBR은 공급자가 최신 보고 장부가치로 명시한 2025.09 자료와 현재 가격으로 추정합니다. 실적 기준·계산 방식이 국내 참고값과 다르므로 단순 상대가치 판단에는 한계가 있습니다. VIX 14 미만 과열 주의는 사용자 참고 기준입니다.</p><p>열린 화면에서 10분마다 갱신하며 시세 결과는 10분, 실제 분기자료는 최대 6시간 재사용합니다. 닫힌 동안의 예약 실행, AI·유료 API·일봉 조회는 없습니다.</p></details><div class="storage" id="storage">Google Sheets 자동 저장</div></footer>
-</main><script>var metric='roe',data=null,seq=0,busy=false;
-var labels={pbr:'PBR 낮은 순',per:'PER 낮은 순',roe:'ROE 높은 순'};
+<div class="screen-rules"><b>시총 ≥ 1조원</b><span>PER &gt; 0 · PBR &gt; 0</span><span>시장별 TOP 5</span><div id="status" class="status loading" role="status"><i class="dot"></i><span id="status-text">수집 중</span></div></div>
+<section><div class="section-title"><h2>저멀티플 TOP 5</h2><span>PER × PBR 낮은 순</span></div><div id="results" class="markets"></div></section>
+<section class="turn-section"><div class="section-title"><h2>고ROE TOP 5</h2><span>동일 조건의 전체 기업 중 ROE 높은 순</span></div><div id="roe-results" class="markets"></div></section>
+<div class="summary"><span class="summary-label">요약</span><div id="summary" class="summary-text"></div></div>
+<footer><details><summary>수집·계산 기준</summary><p>거래 가능 보통주 중 시총 1조원 이상, PER과 PBR이 모두 양수인 기업을 대상으로 합니다. 멀티플은 PER × PBR이며 낮은 순입니다. 고ROE는 동일한 전체 후보 중 ROE 양수인 기업을 높은 순으로 표시합니다. 각 목록은 독립적으로 선정되며 동률은 시총 내림차순, 종목코드 순입니다. 멀티플은 선별 지표일 뿐 저평가나 우량기업을 보장하지 않습니다.</p><p>시장 PER·PBR은 전체 보통주의 양수 지표를 이용한 시총 가중 참고값이며 KRX 공식 지수값이 아닙니다. S&amp;P 500은 Multpl 추정치로 PBR 장부가치 기준은 2025.09입니다. 계산 방식과 기준 시점이 달라 직접 비교에 한계가 있습니다. VIX 14 미만은 사용자 참고 기준입니다.</p><p>화면을 열어두면 10분마다 갱신합니다. S&amp;P 500 참고값은 표시된 날짜의 고정값입니다.</p></details><div class="storage" id="storage">Google Sheets 자동 저장</div></footer>
+</main><script>var metric='multiple',data=null,seq=0,busy=false;
+var labels={multiple:'멀티플 낮은 순',roe:'ROE 높은 순'};
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function fmt(v,d){return typeof v==='number'&&isFinite(v)?v.toLocaleString('ko-KR',{maximumFractionDigits:d===undefined?2:d}):'—'}
@@ -38,7 +39,7 @@ function cap(v){return typeof v==='number'?fmt(v/1e12,2)+'조':'—'}
 function period(v){return /^\d{6}$/.test(v||'')?v.slice(0,4)+'.'+v.slice(4):'—'}
 function status(text,error,loading){el('status').className='status'+(error?' error':'')+(loading?' loading':'');el('status-text').textContent=text}
 function skeleton(){el('results').innerHTML=['KOSPI','KOSDAQ'].map(function(m){return '<section class="market"><div class="market-head"><h2>'+m+'</h2><span>TOP 5</span></div><div class="skeleton">시총·PER·PBR 조건을 확인하고 있습니다.</div></section>'}).join('')}
-function controls(disabled){el('refresh').disabled=disabled;document.querySelectorAll('[data-metric]').forEach(function(b){b.disabled=disabled})}
+function controls(disabled){el('refresh').disabled=disabled;}
 function render(){
  el('bench').innerHTML=['KOSPI','KOSDAQ'].map(function(market){
  var m=data.markets.filter(function(x){return x.market===market})[0];
@@ -46,53 +47,25 @@ function render(){
  var multiple=typeof m.per==='number'&&typeof m.pbr==='number'?m.per*m.pbr:null;
  return '<article class="tile"><div class="tile-head"><b>'+m.market+'</b><span class="tag">보통주 합산 · 참고값</span></div><div class="metrics"><div><div class="metric-label">PER</div><div class="metric-value">'+fmt(m.per)+'</div></div><div><div class="metric-label">PBR</div><div class="metric-value">'+fmt(m.pbr)+'</div></div><div class="multiple"><div class="metric-label">멀티플 PER × PBR</div><div class="metric-value">'+fmt(multiple)+'</div></div></div></article>'
  }).join('')+'<article class="tile vix-tile"><div class="tile-head"><b>VIX</b><span class="tag">Cboe</span></div><div class="vix-value">'+fmt(data.vix.value)+'</div><div class="vix-date">'+(data.vix.status==='ok'?'미국 '+esc(data.vix.asOf)+' 종가':'조회 실패 · '+esc(data.vix.error||''))+'<span class="vix-note" title="VIX는 S&P 500의 예상 변동성 지표입니다. 14 미만 과열 주의는 사용자가 정한 참고 기준입니다.">14 미만: 과열 주의 · 참고 기준</span></div></article>';
- el('results').innerHTML=['KOSPI','KOSDAQ'].map(function(m){
- var a=data.stocks.filter(function(s){return s.market===m}),error=data.errors.filter(function(e){return e.market===m})[0];
+ ['multiple','roe'].forEach(function(kind){var metric=kind;
+ el(metric==='multiple'?'results':'roe-results').innerHTML=['KOSPI','KOSDAQ'].map(function(m){
+ var a=(metric==='multiple'?data.stocks:data.roeStocks).filter(function(s){return s.market===m}),error=data.errors.filter(function(e){return e.market===m})[0];
  var header='<div class="market-head"><h2>'+m+'</h2><span>'+labels[metric]+' · TOP '+a.length+'</span></div>';
  if(error)return '<section class="market">'+header+'<div class="empty error">'+esc(error.error)+'</div></section>';
  if(!a.length)return '<section class="market">'+header+'<div class="empty">해당 없음 · 시총·PER·PBR 조건을 만족하는 종목이 없습니다.</div></section>';
- var columns=['pbr','per','roe'];
- return '<section class="market">'+header+'<table aria-label="'+m+' '+labels[metric]+' 상위 5개"><colgroup><col class="rank-col"><col><col class="price-col"><col class="metric-col"><col class="metric-col"><col class="metric-col"></colgroup><thead><tr><th class="rank" scope="col">#</th><th class="company" scope="col">종목</th><th scope="col">현재가</th>'+columns.map(function(k){return '<th scope="col" class="'+(k===metric?'focus':'')+'">'+k.toUpperCase()+(k==='roe'?' %':'')+'</th>'}).join('')+'</tr></thead><tbody>'+a.map(function(s){return '<tr><td class="rank">'+s.valueRank+'</td><td class="company"><a href="https://stock.naver.com/domestic/stock/'+s.code+'" title="'+esc(s.name)+'" target="_blank" rel="noopener noreferrer">'+esc(s.name)+'</a><span class="code">'+s.code+' · 시총 '+cap(s.marketCap)+'</span></td><td class="price">'+fmt(s.valuationPrice,0)+'</td>'+columns.map(function(k){return '<td class="'+(k===metric?'focus':'')+'">'+fmt(s[k],k==='pbr'?3:2)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></section>'
+ var columns=['pbr','per','multiple','roe'];
+ return '<section class="market">'+header+'<table aria-label="'+m+' '+labels[metric]+' 상위 5개"><colgroup><col class="rank-col"><col><col class="price-col"><col class="metric-col"><col class="metric-col"><col class="metric-col"><col class="metric-col"></colgroup><thead><tr><th class="rank" scope="col">#</th><th class="company" scope="col">종목</th><th scope="col">현재가</th>'+columns.map(function(k){return '<th scope="col" class="'+(k===metric?'focus':'')+'">'+(k==='multiple'?'멀티플':k.toUpperCase())+(k==='roe'?' %':'')+'</th>'}).join('')+'</tr></thead><tbody>'+a.map(function(s){return '<tr><td class="rank">'+s.valueRank+'</td><td class="company"><a href="https://stock.naver.com/domestic/stock/'+s.code+'" title="'+esc(s.name)+'" target="_blank" rel="noopener noreferrer">'+esc(s.name)+'</a><span class="code">'+s.code+' · 시총 '+cap(s.marketCap)+'</span></td><td class="price">'+fmt(s.valuationPrice,0)+'</td>'+columns.map(function(k){return '<td class="'+(k===metric?'focus':'')+'">'+fmt(s[k],k==='pbr'?3:2)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></section>'
  }).join('');
+ });
  el('summary').innerHTML=data.summary.map(function(s){return '<span>'+esc(s)+'</span>'}).join('');
  status(data.stale?'저장본 · 갱신 실패':'수집 '+time(data.collectedAt),data.stale||data.status!=='complete',false);
  el('status').title=data.refreshError||data.errors.map(function(e){return e.market+': '+e.error}).join(' / ');
  el('storage').textContent='Sheets 저장 '+time(data.savedAt)+' · 10분 자동 갱신';
 }
 
-function renderTurnarounds(t){
- el('turn-status').textContent=(t.stale?'저장된 시총 기준 · ':'')+'분기 확인 '+t.checked+'/'+t.total+'개 · 흑자전환 '+t.hits.length+'개'+(t.errors.length?' · 미확인 '+t.errors.length+'개':'');
- el('turn-results').innerHTML=['KOSPI','KOSDAQ'].map(function(m){
-  var c=t.counts[m]||{total:0,checked:0,hits:0,unknown:0},a=t.hits.filter(function(s){return s.market===m}).slice(0,5),failed=t.marketErrors.some(function(e){return e.market===m});
-  var header='<div class="market-head"><h2>'+m+'</h2><span>'+c.checked+'/'+c.total+'개 확인 · 전환 '+c.hits+'개 · ROE순 최대 5개</span></div>';
-  if(!a.length)return '<section class="market">'+header+'<div class="empty'+(c.unknown||failed?' error':'')+'">'+(c.unknown||failed?'확인한 기업 중 해당 없음 · 미확인 자료가 남아 있습니다.':'해당 없음 · 확인한 기업 중 전년 동기 대비 흑자전환이 없습니다.')+'</div></section>';
-  function profit(value,key){return '<span class="op">'+fmt(value,1)+'</span><span class="period">'+period(key)+'</span>'}
-  return '<section class="market">'+header+'<table class="turn-table" aria-label="'+m+' 흑자전환"><colgroup><col><col class="op-col"><col class="op-col"><col class="op-col"><col class="roe-col"></colgroup><thead><tr><th scope="col" class="company">종목</th><th scope="col">최근 영업익</th><th scope="col">직전 분기</th><th scope="col">전년 동기</th><th scope="col">ROE %</th></tr></thead><tbody>'+a.map(function(s){
-   var f=s.finance;return '<tr><td class="company"><a href="https://stock.naver.com/domestic/stock/'+s.code+'" title="'+esc(s.name)+'" target="_blank" rel="noopener noreferrer">'+esc(s.name)+'</a><span class="code">'+s.code+' · 시총 '+cap(s.marketCap)+'</span></td><td class="focus">'+profit(f.op,f.period)+'</td><td>'+profit(f.previous,f.previousPeriod)+'</td><td class="loss">'+profit(f.yoy,f.yoyPeriod)+'</td><td>'+fmt(s.roe)+'</td></tr>'
-  }).join('')+'</tbody></table></section>'
- }).join('');
- el('turn-errors').innerHTML=t.errors.length?'<details><summary>분기 자료 미확인 '+t.errors.length+'개</summary><div>'+t.errors.map(function(e){return '<p>'+esc(e.name)+' · '+esc(e.error)+'</p>'}).join('')+'</div></details>':'';
- el('turn-note').textContent='영업이익 단위: 억원 · 최근 실적 > 0, 전년 동기 < 0 · PER 음수·미제공 허용 · PBR > 0 · 추정치 제외 · 판정 '+time(t.checkedAt);
-}
 function load(){
- if(busy)return;busy=true;var id=++seq;controls(true);status('기본 순위 수집·저장 중',false,true);
- el('turn-status').textContent='기본 순위 수집 후 분기 실적을 확인합니다.';
- google.script.run.withSuccessHandler(function(d){
-  if(id!==seq)return;data=d;render();el('turn-status').textContent='시총 1조↑ 기업의 분기 실적 확인 중 · 저장된 자료 재사용';
-  google.script.run.withSuccessHandler(function(t){
-   if(id!==seq)return;renderTurnarounds(t);busy=false;controls(false);
-  }).withFailureHandler(function(e){
-   if(id!==seq)return;busy=false;controls(false);el('turn-status').textContent='분기 조회 실패';
-   el('turn-results').innerHTML='<div class="empty error">'+esc(e.message)+' · 갱신 확인으로 다시 조회해 주세요.</div>';
-  }).getTurnarounds(metric);
- }).withFailureHandler(function(e){
-  if(id!==seq)return;busy=false;controls(false);status('조회 실패',true,false);el('summary').textContent=e.message+(data?' · 기존 결과 유지':'');
-  if(!data)el('results').innerHTML='<div class="empty error">자료를 불러오지 못했습니다. 갱신 확인을 눌러 다시 조회해 주세요.</div>';
- }).getDashboard(metric);
+ if(busy)return;busy=true;controls(true);status('순위 수집·저장 중',false,true);
+ google.script.run.withSuccessHandler(function(d){data=d;render();busy=false;controls(false);}).withFailureHandler(function(e){busy=false;controls(false);status('조회 실패',true,false);el('summary').textContent=e.message;}).getDashboard('multiple');
 }
-document.querySelectorAll('[data-metric]').forEach(function(b){b.onclick=function(){
- if(busy||metric===b.dataset.metric)return;metric=b.dataset.metric;data=null;skeleton();el('summary').textContent='선택한 지표의 순위를 확인합니다.';
- document.querySelectorAll('[data-metric]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});load();
-}});
 el('refresh').onclick=load;setInterval(function(){if(!document.hidden&&!busy)load()},600000);skeleton();load();
 </script></body></html>
